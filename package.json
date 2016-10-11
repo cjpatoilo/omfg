@@ -1,0 +1,26 @@
+{
+	"name": "omfg",
+	"version": "0.0.1",
+	"description": "Start repository so fast as a.. OMFG!",
+	"homepage": "https://github.com/cjpatoilo/omfg#readme",
+	"repository": "cjpatoilo/omfg",
+	"license": "MIT",
+	"author": "CJ Patoilo <cjpatoilo@gmail.com>",
+	"main": "index.js",
+	"keywords": [
+		"repository",
+		"github"
+	],
+	"ignore": [
+		"test"
+	],
+	"dependencies": {
+	},
+	"devDependencies": {
+	},
+	"engines": {
+		"node": "^6.0.0"
+	},
+	"scripts": {
+	}
+}
