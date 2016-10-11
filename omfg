@@ -1,0 +1,100 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+const https = require('https'),
+	child = require('child_process'),
+	fs = require('fs'),
+	program = require('commander'),
+	colors = require('colors');
+
+
+program
+	.version('0.0.1')
+	.usage(' <repository> [<options> ...]')
+	.option('-r, --repository <opt>', 'set the repository name')
+	.option('-l, --license <opt>', 'choose the license')
+	.option('-i, --ignore <opts>', 'set useful .gitignore files')
+	.option('--github', 'use GitHub templates')
+	.on('--help', () => {
+		console.log('  Examples:');
+		console.log('');
+		console.log('    $ omfg');
+		console.log('    $ omfg --license mit');
+		console.log('    $ omfg --gitignore node');
+		console.log('');
+	})
+	.parse(process.argv);
+
+
+/**
+ * Create directory.
+ */
+if (!program.repository) {
+	console.log('set the repository name');
+	return;
+}
+const repository = program.repository;
+child.exec(`mkdir ${repository}`)
+
+
+/**
+ * Create readme.md.
+ */
+if (program.repository) {
+	let url = {
+		host: 'raw.githubusercontent.com',
+		path: `/cjpatoilo/omfg/master/templates/readme/readme.md`
+	};
+	https
+		.get(url, (response) => {
+			return response.on('data', (response) => {
+				return fs.writeFile(`${repository}/readme.md`, response);
+			});
+		});
+}
+
+
+/**
+ * Create license.
+ */
+if (program.license) {
+	let url = {
+		host: 'raw.githubusercontent.com',
+		path: `/cjpatoilo/omfg/master/templates/licenses/${program.license}`
+	};
+	https
+		.get(url, (response) => {
+			return response.on('data', (response) => {
+				return fs.writeFile(`${repository}/license`, response);
+			});
+		});
+}
+
+
+/**
+ * Create .gitignore.
+ */
+if (program.ignore) {
+	let url = {
+		host: 'www.gitignore.io',
+		path: '/api/' + program.ignore,
+	};
+	https
+		.get(url, (response) => {
+			return response.on('data', (response) => {
+				return fs.writeFile(`${repository}/.gitignore`, response);
+			});
+		});
+}
+
+
+/**
+ * Create GitHub Template.
+ */
+if (program.github) {
+	let github = `${repository}/.github`;
+	child.exec(`mkdir ${github}`)
+	child.exec(`touch ${github}/contributing.md ${github}/issue_template.md ${github}/pull_request_template.md`)
+}
