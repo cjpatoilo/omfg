@@ -6,13 +6,17 @@
 const https = require('https'),
 	child = require('child_process'),
 	fs = require('fs'),
-	program = require('commander'),
+	omfg = require('commander'),
 	colors = require('colors');
 
 
-program
+
+/**
+ * Statements.
+ */
+omfg
 	.version('0.0.1')
-	.usage(' <repository> [<options> ...]')
+	.usage('[<options> ...]')
 	.option('-r, --repository <opt>', 'set the repository name')
 	.option('-l, --license <opt>', 'choose the license')
 	.option('-i, --ignore <opts>', 'set useful .gitignore files')
@@ -29,28 +33,37 @@ program
 
 
 /**
+ * Statements.
+ */
+const SOURCE = '/cjpatoilo/omfg/master/src',
+	REPOSITORY = omfg.repository,
+	LICENSE = omfg.license,
+	IGNORE = omfg.ignore,
+	GITHUB = omfg.github;
+
+
+/**
  * Create directory.
  */
-if (!program.repository) {
+if (!REPOSITORY) {
 	console.log('set the repository name');
 	return;
 }
-const repository = program.repository;
-child.exec(`mkdir ${repository}`)
+child.exec(`mkdir ${REPOSITORY}`)
 
 
 /**
  * Create readme.md.
  */
-if (program.repository) {
+if (REPOSITORY) {
 	let url = {
 		host: 'raw.githubusercontent.com',
-		path: `/cjpatoilo/omfg/master/templates/readme/readme.md`
+		path: `${SOURCE}/readme/readme.md`
 	};
 	https
 		.get(url, (response) => {
 			return response.on('data', (response) => {
-				return fs.writeFile(`${repository}/readme.md`, response);
+				return fs.writeFile(`${REPOSITORY}/readme.md`, response);
 			});
 		});
 }
@@ -59,15 +72,15 @@ if (program.repository) {
 /**
  * Create license.
  */
-if (program.license) {
+if (LICENSE) {
 	let url = {
 		host: 'raw.githubusercontent.com',
-		path: `/cjpatoilo/omfg/master/templates/licenses/${program.license}`
+		path: `${SOURCE}/licenses/${LICENSE}`
 	};
 	https
 		.get(url, (response) => {
 			return response.on('data', (response) => {
-				return fs.writeFile(`${repository}/license`, response);
+				return fs.writeFile(`${REPOSITORY}/license`, response);
 			});
 		});
 }
@@ -76,15 +89,15 @@ if (program.license) {
 /**
  * Create .gitignore.
  */
-if (program.ignore) {
+if (IGNORE) {
 	let url = {
 		host: 'www.gitignore.io',
-		path: '/api/' + program.ignore,
+		path: `/api/${IGNORE}`,
 	};
 	https
 		.get(url, (response) => {
 			return response.on('data', (response) => {
-				return fs.writeFile(`${repository}/.gitignore`, response);
+				return fs.writeFile(`${REPOSITORY}/.gitignore`, response);
 			});
 		});
 }
@@ -93,8 +106,8 @@ if (program.ignore) {
 /**
  * Create GitHub Template.
  */
-if (program.github) {
-	let github = `${repository}/.github`;
-	child.exec(`mkdir ${github}`)
-	child.exec(`touch ${github}/contributing.md ${github}/issue_template.md ${github}/pull_request_template.md`)
+if (GITHUB) {
+	let path = `${REPOSITORY}/.github`;
+	child.exec(`mkdir ${path}`)
+	child.exec(`touch ${path}/contributing.md ${path}/issue_template.md ${path}/pull_request_template.md`)
 }
