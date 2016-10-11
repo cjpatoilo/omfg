@@ -1,6 +1,6 @@
 {
   "name": "omfg",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Start repository so fast as a.. OMFG!",
   "homepage": "https://github.com/cjpatoilo/omfg#readme",
   "repository": {
@@ -10,6 +10,7 @@
   "license": "MIT",
   "author": "CJ Patoilo <cjpatoilo@gmail.com>",
   "main": "index.js",
+  "cli": "index.js",
   "keywords": [
     "repository",
     "github"
