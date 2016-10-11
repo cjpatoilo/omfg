@@ -20,20 +20,22 @@ $ npm install --global omfg
 ```
 $ omfg --help
 
-  Usage
-    $ omfg [<directory|glob> ...]
+  Usage:
+    $ omfg [<directory|options> ...]
 
-  Options
-    --init          Initialized immediately with only README file
-    --license       Choose the license
-    --ignore        Set useful .gitignore files
-    --github        Use GitHub templates
+ Options:
 
-  Examples
+    -h, --help                   output usage information
+    -V, --version                output the version number
+    -l, --license <license>      choose the license
+    -g, --gitignore <gitignore>  set useful .gitignore files
+    --github                     use GitHub templates
+
+  Examples:
+
     $ omfg
-    $ omfg --ignore node
     $ omfg --license mit
-    $ omfg --github
+    $ omfg --gitignore node
 ```
 
 
