@@ -1,16 +1,12 @@
 {
   "name": "omfg",
-  "version": "0.0.3",
-  "description": "Start repository so fast as a.. OMFG!",
-  "homepage": "https://github.com/cjpatoilo/omfg#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cjpatoilo/omfg.git"
-  },
+  "version": "0.0.4",
+  "description": "The easy way to start open source projects.",
+  "homepage": "https://cjpatoilo.com/omfg",
+  "repository": "cjpatoilo/omfg",
   "license": "MIT",
   "author": "CJ Patoilo <cjpatoilo@gmail.com>",
-  "main": "index.js",
-  "cli": "index.js",
+  "main": "bin/index.js",
   "keywords": [
     "repository",
     "github"
@@ -25,20 +21,19 @@
     "templates",
     "test"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "commander": "^2.9.0"
+  },
   "devDependencies": {
-    "commander": "^2.9.0",
+    "colors": "^1.1.2",
     "husky": "^0.11.8"
   },
   "engines": {
     "node": "^6.0.0"
   },
   "scripts": {
-    "prepush": "npm test",
     "pretest": "npm install",
-    "test": "echo \"Warning: no test specified\" && exit 0"
+    "test": "node ./test/test"
   },
-  "bugs": {
-    "url": "https://github.com/cjpatoilo/omfg/issues"
-  }
+  "bin": "bin/index.js"
 }
