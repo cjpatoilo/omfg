@@ -32,15 +32,9 @@ omfg
 /**
  * Statements
  */
- // Verificate Node cmd
 if (process.argv[0].match(/node/i)) var repository = process.argv[2];
 else var repository = process.argv[1];
-// Define source path
-const source = {
-	hostname: `raw.githubusercontent.com`,
-	path: '/cjpatoilo/omfg/master/src',
-};
-// Help information
+const source = 'raw.githubusercontent.com/cjpatoilo/omfg/master/src';
 const info = `
   Usage:
 
@@ -69,11 +63,6 @@ const info = `
 
     $ omfg <directory> --license mit --ignore node --ci travis
 `;
-
-
-console.log(omfg._args);
-
-return
 
 
 /**
@@ -116,16 +105,9 @@ if (repository) {
  * Create readme.md
  */
 if (repository) {
-	let url = {
-		hostname: `${source.hostname}`,
-		path: `${source.path}/readme/readme.md`,
-	};
-	https
-		.get(url, (response) => {
-			return response.on('data', (response) => {
-				return fs.writeFile(`${repository}/readme.md`, response);
-			});
-		});
+	let url = `${source}/readme/readme`;
+	let file = `readme.md`;
+	Request(url, file);
 }
 
 
@@ -133,28 +115,14 @@ if (repository) {
  * Create license
  */
 if (typeof omfg.license === 'string') {
-	let url = {
-		hostname: `${source.hostname}`,
-		path: `${source.path}/licenses/${omfg.license}`,
-	};
-	https
-		.get(url, (response) => {
-			return response.on('data', (response) => {
-				return fs.writeFile(`${repository}/license`, response);
-			});
-		});
+	let url = `${source}/licenses/${omfg.license}`;
+	let file = `license`;
+	Request(url, file);
 }
 else {
-	let url = {
-		hostname: `${source.hostname}`,
-		path: `${source.path}/licenses/mit`,
-	};
-	https
-		.get(url, (response) => {
-			return response.on('data', (response) => {
-				return fs.writeFile(`${repository}/license`, response);
-			});
-		});
+	let url = `${source}/licenses/mit`;
+	let file = `license`;
+	Request(url, file);
 }
 
 
@@ -162,36 +130,69 @@ else {
  * Create .gitignore
  */
 if (typeof omfg.ignore === 'string') {
-	let url = {
-		hostname: `www.gitignore.io`,
-		path: `/api/${omfg.ignore}`,
-	};
-	https
-		.get(url, (response) => {
-			return response.on('data', (response) => {
-				return fs.writeFile(`${repository}/.gitignore`, response);
-			});
-		});
+	let url = `www.gitignore.io/api/${omfg.ignore}`;
+	let file = `.gitignore`;
+	Request(url, file);
 }
 else {
-	let url = {
-		hostname: `www.gitignore.io`,
-		path: `/api/node`,
-	};
-	https
-		.get(url, (response) => {
-			return response.on('data', (response) => {
-				return fs.writeFile(`${repository}/.gitignore`, response);
-			});
-		});
+	let url = `www.gitignore.io/api/node`;
+	let file = `.gitignore`;
+	Request(url, file);
+}
+
+
+/**
+ * Create .travis.yml
+ */
+if (omfg.ci) {
+	let url = `${source}/ci/${omfg.ci}`;
+	let file = `.${omfg.ci}.yml`;
+	Request(url, file);
+}
+else {
+	let url = `${source}/ci/travis`;
+	let file = `.travis.yml`;
+	Request(url, file);
 }
 
 
 /**
  * Create GitHub Template
  */
-if (!omfg.template) {
+if (omfg.template) {
 	let url = `${repository}/.github`;
 	child.exec(`mkdir ${url}`)
 	child.exec(`touch ${url}/contributing ${url}/issue_template ${url}/pull_request_template`)
+}
+
+
+/**
+ * Create .editorconfig
+ */
+if (omfg.editor) {
+	let url = `${source}/misc/editorconfig`;
+	let file = `.editorconfig`;
+	Request(url, file);
+}
+
+
+/**
+ * Helpers
+ */
+
+ // GET
+function Request(url, file) {
+
+	// Normalize hostname and pathname
+	let path = url.split('/');
+	let hostname = path[0];
+	path.shift();
+	path = `/${path.join('/')}`;
+
+	// Request, response and create file
+	https.get({ hostname: hostname, path: path }, (response) => {
+		return response.on('data', (response) => {
+			return fs.writeFile(`${repository}/${file}`, response);
+		});
+	});
 }
