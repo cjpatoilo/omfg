@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Module dependencies.
+ * Module dependencies
  */
 const https = require('https');
 const child = require('child_process');
@@ -11,61 +11,75 @@ const colors = require('colors');
 
 
 /**
- * Statements.
+ * App
  */
 omfg
 	.version('0.0.1')
 	.usage('<directory> [<options>]')
 	.option('-h, --help', 'Display help information')
 	.option('-v, --version', 'Output OMFG version')
-	.option('-l, --license <opt>', 'Choose the license')
-	.option('-i, --ignore <opts>', 'Set useful .gitignore files')
-	.option('-t, --template', 'Use GitHub templates')
+	.option('-l, --license <opt>', 'Set license')
+	.option('-i, --ignore <opt>', 'Set .gitignore')
+	.option('-c, --ci <opt>', 'Set continue')
+	.option('--no-template', 'Disallow .github templates')
+	.option('--no-editor', 'Disallow .editorconfig')
+	.option('--no-readme', 'Disallow readme.md')
+	.option('--no-license', 'Disallow readme.md')
+	.option('--no-ignore', 'Disallow readme.md')
 	.parse(process.argv);
 
 
 /**
- * Statements.
+ * Statements
  */
-const repository = () => {
-	let verification = String(process.argv.slice(2)).indexOf('--') === -1;
-	if (verification) return process.argv.slice(2);
-	else return false;
+ // Verificate Node cmd
+if (process.argv[0].match(/node/i)) var repository = process.argv[2];
+else var repository = process.argv[1];
+// Define source path
+const source = {
+	hostname: `raw.githubusercontent.com`,
+	path: '/cjpatoilo/omfg/master/src',
 };
-const source = 'raw.githubusercontent.com/cjpatoilo/omfg/master/src';
-const license = omfg.license;
-const ignore = omfg.ignore;
-const template = omfg.github;
-const help = omfg.help;
+// Help information
 const info = `
   Usage:
 
-    omfg <command> [<args>] [<options>]
-
-  Commands:
-
-    help                    Display help information about Boeing
-    version                 Output Bower version
+    $ omfg <directory> [<options>]
 
   Options:
 
-    -h, --help              Display help information about Boeing
-    -v, --version           Output Bower version
+    -h, --help              Display help information
+    -v, --version           Output OMFG version
+    -l, --license           Set license
+    -i, --ignore            Set .gitignore
+    -c, --ci                Set continue
+    --no-template           Disallow .github templates
+    --no-editor             Disallow .editorconfig
+    --no-readme             Disallow readme.md
+    --no-license            Disallow readme.md
+    --no-ignore             Disallow readme.md
 
   Examples:
 
-    omfg
-    omfg help
-    omfg --version
+    $ omfg
+    $ omfg help
+    $ omfg --version
 
-See 'omfg help <command>' for more information on a specific command.
+  Default when no arguments:
+
+    $ omfg <directory> --license mit --ignore node --ci travis
 `;
+
+
+console.log(omfg._args);
+
+return
 
 
 /**
  * Help information
  */
-if (!help) {
+if (!omfg.help) {
 	console.log(info);
 	return;
 }
@@ -83,28 +97,29 @@ if (!process.argv.slice(2).length) {
 /**
  * Without directory
  */
-if (!repository) {
-	console.log(`\n[ERROR] Set the repository name:\n\n   $ omfg --repository myApp\n`.red);
+if (repository.indexOf('--') !== -1) {
+	console.log(`\n[ERROR] Set the directory name:\n\n   $ omfg <directory> [<options>]\n`.red);
 	return;
 }
 
 
 /**
- * Create directory.
+ * Create directory
  */
 if (repository) {
-	child.exec(`mkdir ${repository}`)
+	child.exec(`mkdir ${repository}`);
 }
 
-console.log('Code is Poetry');
-return;
 
 
 /**
- * Create readme.md.
+ * Create readme.md
  */
 if (repository) {
-	let url = `${source}/readme/readme.md`;
+	let url = {
+		hostname: `${source.hostname}`,
+		path: `${source.path}/readme/readme.md`,
+	};
 	https
 		.get(url, (response) => {
 			return response.on('data', (response) => {
@@ -115,10 +130,25 @@ if (repository) {
 
 
 /**
- * Create license.
+ * Create license
  */
-if (license) {
-	let url = `${source}/licenses/${license}`;
+if (typeof omfg.license === 'string') {
+	let url = {
+		hostname: `${source.hostname}`,
+		path: `${source.path}/licenses/${omfg.license}`,
+	};
+	https
+		.get(url, (response) => {
+			return response.on('data', (response) => {
+				return fs.writeFile(`${repository}/license`, response);
+			});
+		});
+}
+else {
+	let url = {
+		hostname: `${source.hostname}`,
+		path: `${source.path}/licenses/mit`,
+	};
 	https
 		.get(url, (response) => {
 			return response.on('data', (response) => {
@@ -129,10 +159,25 @@ if (license) {
 
 
 /**
- * Create .gitignore.
+ * Create .gitignore
  */
-if (ignore) {
-	let url = `www.gitignore.io/api/${ignore}`;
+if (typeof omfg.ignore === 'string') {
+	let url = {
+		hostname: `www.gitignore.io`,
+		path: `/api/${omfg.ignore}`,
+	};
+	https
+		.get(url, (response) => {
+			return response.on('data', (response) => {
+				return fs.writeFile(`${repository}/.gitignore`, response);
+			});
+		});
+}
+else {
+	let url = {
+		hostname: `www.gitignore.io`,
+		path: `/api/node`,
+	};
 	https
 		.get(url, (response) => {
 			return response.on('data', (response) => {
@@ -143,10 +188,10 @@ if (ignore) {
 
 
 /**
- * Create GitHub Template.
+ * Create GitHub Template
  */
-if (template) {
-	let url = `${repository}/github`;
+if (!omfg.template) {
+	let url = `${repository}/.github`;
 	child.exec(`mkdir ${url}`)
-	child.exec(`touch ${url}/contributing.md ${url}/issue_template.md ${url}/pull_request_template.md`)
+	child.exec(`touch ${url}/contributing ${url}/issue_template ${url}/pull_request_template`)
 }
