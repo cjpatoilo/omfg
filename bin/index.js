@@ -11,6 +11,28 @@ const colors = require('colors');
 
 
 /**
+ * Helpers
+ */
+
+ // GET
+const Request = (url, file) => {
+
+	// Normalize hostname and pathname
+	let path = url.split('/');
+	let hostname = path[0];
+	path.shift();
+	path = `/${path.join('/')}`;
+
+	// Request, response and create file
+	https.get({ hostname: hostname, path: path }, (response) => {
+		return response.on('data', (response) => {
+			return fs.writeFile(`${repository}/${file}`, response);
+		});
+	});
+}
+
+
+/**
  * App
  */
 omfg
@@ -173,26 +195,4 @@ if (omfg.editor) {
 	let url = `${source}/misc/editorconfig`;
 	let file = `.editorconfig`;
 	Request(url, file);
-}
-
-
-/**
- * Helpers
- */
-
- // GET
-function Request(url, file) {
-
-	// Normalize hostname and pathname
-	let path = url.split('/');
-	let hostname = path[0];
-	path.shift();
-	path = `/${path.join('/')}`;
-
-	// Request, response and create file
-	https.get({ hostname: hostname, path: path }, (response) => {
-		return response.on('data', (response) => {
-			return fs.writeFile(`${repository}/${file}`, response);
-		});
-	});
 }
