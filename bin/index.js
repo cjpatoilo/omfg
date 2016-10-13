@@ -78,9 +78,9 @@ const info = `
 
   Examples:
 
-    $ omfg
-    $ omfg help
-    $ omfg --version
+    $ omfg myApp
+    $ omfg sample --ignore android
+    $ omfg www --license apache-2.0
 
   Default when no arguments:
 

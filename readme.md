@@ -4,6 +4,10 @@
 
 > The easy way to start open source projects.
 
+[![Build Status](https://travis-ci.org/cjpatoilo/omfg.svg?branch=master)](https://travis-ci.org/cjpatoilo/omfg)
+[![Dependencies Status](https://david-dm.org/cjpatoilo/omfg.svg)](https://travis-ci.org/cjpatoilo/omfg)
+[![npm version](https://badge.fury.io/js/omfg.svg)](https://badge.fury.io/js/omfg)
+
 
 ## Why it's awesome?
 
@@ -24,33 +28,32 @@ $ omfg --help
 
   Usage:
 
-    omfg <command> [<args>] [<options>]
-
-  Commands:
-
-    help                    Display help information about OMFG
-    version                 Output Bower version
+    $ omfg <directory> [<options>]
 
   Options:
 
-    -h, --help              Display help information about OMFG
-    -v, --version           Output Bower version
+    -h, --help              Display help information
+    -v, --version           Output OMFG version
+    -l, --license           Set license
+    -i, --ignore            Set .gitignore
+    -c, --ci                Set continue
+    --no-template           Disallow .github templates
+    --no-editor             Disallow .editorconfig
+    --no-readme             Disallow readme.md
+    --no-license            Disallow readme.md
+    --no-ignore             Disallow readme.md
 
   Examples:
 
-    omfg
-    omfg help
-    omfg --version
+    $ omfg myApp
+    $ omfg sample --ignore android
+    $ omfg www --license apache-2.0
 
-See 'omfg help <command>' for more information on a specific command.
+  Default when no arguments:
+
+    $ omfg <directory> --license mit --ignore node --ci travis
 
 ```
-
-
-## Table of Contents
-
-- [Getting Started](#)
-- [Examples](#)
 
 
 ## Contributing

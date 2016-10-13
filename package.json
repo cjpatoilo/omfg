@@ -6,7 +6,7 @@
 	"repository": "cjpatoilo/omfg",
 	"license": "MIT",
 	"author": "CJ Patoilo <cjpatoilo@gmail.com>",
-	"main": "bin/index.js",
+	"bin": "bin/index.js",
 	"keywords": [
 		"repository",
 		"github"
@@ -34,6 +34,5 @@
 	"scripts": {
 		"pretest": "npm install",
 		"test": "node ./test/test"
-	},
-	"bin": "bin/index.js"
+	}
 }
