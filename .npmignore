@@ -1,0 +1,8 @@
+.editorconfig
+.gitignore
+.github
+.travis.yml
+.npmignore
+package.json
+templates
+test
