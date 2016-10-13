@@ -8,6 +8,7 @@ const child = require('child_process');
 const fs = require('fs');
 const omfg = require('commander');
 const colors = require('colors');
+const version = require('./../package.json').version;
 
 
 /**
@@ -36,7 +37,7 @@ const Request = (url, file) => {
  * App
  */
 omfg
-	.version('0.0.1')
+	.version(version)
 	.usage('<directory> [<options>]')
 	.option('-h, --help', 'Display help information')
 	.option('-v, --version', 'Output OMFG version')
