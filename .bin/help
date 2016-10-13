@@ -1,0 +1,18 @@
+  Usage:
+
+    $ boeing [<directory> <branch>] [<options>]
+
+  Options:
+
+    -h, --help              Display help information about Boeing
+    -v, --version           Output Bower version
+
+  Examples:
+
+    $ boeing
+    $ boeing dist gh-pages
+    $ boeing --help
+    $ boeing --version
+
+By default when no arguments: $ boeing dist gh-pages
+
