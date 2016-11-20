@@ -17,7 +17,7 @@ OMFG is the easy way to start open source projects. Hope you enjoy!
 ## Install
 
 ```
-$ npm install omfg
+$ npm install -g omfg
 ```
 
 
