@@ -1,6 +1,4 @@
-<p align="center">
-	<a href="http://cjpatoilo.com/omfg"><img width="100%" src="http://cjpatoilo.com/omfg/images/thumbnail.jpg" alt="OMFG | The easy way to start open source projects."></a>
-</p>
+<a align="center" href="http://cjpatoilo.com/omfg"><img width="100%" src="http://cjpatoilo.com/omfg/images/thumbnail.jpg" alt="OMFG | The easy way to start open source projects."></a>
 
 > The easy way to start open source projects.
 
